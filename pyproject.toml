@@ -1,0 +1,39 @@
+[project]
+name = "notification_router_plugin_line_notify"
+authors = [
+    {name = "Jacky Chen", email = "jacky9813@hotmail.com"}
+]
+description = "A destination plugin for Notification Router."
+readme = "README.rst"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+dependencies = [
+    "flasgger>=0.9.7.1",
+    "notification_router",
+    "requests >= 2.31.0"
+]
+dynamic = [
+    "classifiers",
+    "version"
+]
+
+[project.entry-points.'notification_router.destination_plugins']
+line_notify = "notification_router_plugin_line_notify:LineNotifyDestination"
+
+[project.entry-points.'notification_router.plugin_endpoints']
+line_notify = "notification_router_plugin_line_notify:bp"
+
+[build-system]
+requires = [
+    "setuptools >= 68.0",
+    "setuptools-scm[toml] >= 8.0"
+]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.package-dir]
+notification_router_plugin_line_notify = "notification_router_plugin_line_notify"
+
+[tool.setuptools.dynamic]
+classifiers = {file = ".classifiers"}
+
+[tool.setuptools_scm]
