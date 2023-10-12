@@ -10,25 +10,24 @@ bp = flask.Blueprint("line_notify", __name__)
 
 
 @bp.get("/authorize")
-@flasgger.swag_from(
-    specs={
-        "description": "Register LINE Notify service to a user or group.",
-        "parameters": [],
-        "responses": {
-            "302": {"description": "Redirect to LINE Notify consent screen."},
-            "501": {
-                "description": "Server has not been properly configured.",
-                "content": {
-                    "application/json": {
-                        "schema": {
-                            "$ref": "#/components/schemas/error"
-                        }
+@flasgger.swag_from(specs={
+    "tags": ["LINE Notify"],
+    "description": "Register LINE Notify service to a user or group.",
+    "parameters": [],
+    "responses": {
+        "302": {"description": "Redirect to LINE Notify consent screen."},
+        "501": {
+            "description": "Server has not been properly configured.",
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/error"
                     }
                 }
             }
         }
     }
-)
+})
 def authorize() -> flask.Response:
     params = {
         "response_type": "code",
@@ -52,64 +51,63 @@ def authorize() -> flask.Response:
 
 
 @bp.get("/callback")
-@flasgger.swag_from(
-    specs={
-        "description": "The callback function for authorize and fetches access token.",
-        "parameters": [
-            {
-                "name": "code",
-                "in": "query",
-                "description": "The authorization code that the server must"
-                "process before giving out access token.",
-                "required": "true"
-            },
-            {
-                "name": "state",
-                "in": "query",
-                "description": "The one time code for preventing replay attack.",
-                "required": "true"
+@flasgger.swag_from(specs={
+    "tags": ["LINE Notify"],
+    "description": "The callback function for authorize and fetches access token.",
+    "parameters": [
+        {
+            "name": "code",
+            "in": "query",
+            "description": "The authorization code that the server must"
+            "process before giving out access token.",
+            "required": "true"
+        },
+        {
+            "name": "state",
+            "in": "query",
+            "description": "The one time code for preventing replay attack.",
+            "required": "true"
+        }
+    ],
+    "responses": {
+        "200": {
+            "description": "Success with access token being returned.",
+            "content": {
+                "text/plain": {}
             }
-        ],
-        "responses": {
-            "200": {
-                "description": "Success with access token being returned.",
-                "content": {
-                    "text/plain": {}
-                }
-            },
-            "400": {
-                "description": "Not able to fetch access token from LINE notify.",
-                "content": {
-                    "application/json": {
-                        "schema": {
-                            "$ref": "#/components/schemas/error"
-                        }
+        },
+        "400": {
+            "description": "Not able to fetch access token from LINE notify.",
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/error"
                     }
                 }
-            },
-            "401": {
-                "description": "No authorization code in request.",
-                "content": {
-                    "application/json": {
-                        "schema": {
-                            "$ref": "#/components/schemas/error"
-                        }
+            }
+        },
+        "401": {
+            "description": "No authorization code in request.",
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/error"
                     }
                 }
-            },
-            "501": {
-                "description": "Server has not been properly configured.",
-                "content": {
-                    "application/json": {
-                        "schema": {
-                            "$ref": "#/components/schemas/error"
-                        }
+            }
+        },
+        "501": {
+            "description": "Server has not been properly configured.",
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/error"
                     }
                 }
             }
         }
     }
-)
+})
 def authorize_callback() -> flask.Response:
     if flask.request.method == "GET":
         code = flask.request.args.get("code", None)
@@ -163,69 +161,68 @@ def authorize_callback() -> flask.Response:
     )
 
 @bp.post("/callback")
-@flasgger.swag_from(
-    specs={
-        "description": "The callback function for authorize and fetches access token.",
-        "requestBody": {
-            "content": {
-                "application/x-www-form-urlencoded": {
-                    "schema": {
-                        "type": "object",
-                        "properties": {
-                            "code": {
-                                "type": "string",
-                                "description": "The authorization code provided by LINE Notify API.",
-                                "required": "true"
-                            },
-                            "state": {
-                                "type": "string",
-                                "description": "The state for preventing replay attack.",
-                                "required": "true"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "responses": {
-            "200": {
-                "description": "Success with access token being returned.",
-                "content": {
-                    "text/plain": {}
-                }
-            },
-            "400": {
-                "description": "Not able to fetch access token from LINE notify.",
-                "content": {
-                    "application/json": {
-                        "schema": {
-                            "$ref": "#/components/schemas/error"
-                        }
-                    }
-                }
-            },
-            "401": {
-                "description": "No authorization code in request.",
-                "content": {
-                    "application/json": {
-                        "schema": {
-                            "$ref": "#/components/schemas/error"
-                        }
-                    }
-                }
-            },
-            "501": {
-                "description": "Server has not been properly configured.",
-                "content": {
-                    "application/json": {
-                        "schema": {
-                            "$ref": "#/components/schemas/error"
+@flasgger.swag_from(specs={
+    "tags": ["LINE Notify"],
+    "description": "The callback function for authorize and fetches access token.",
+    "requestBody": {
+        "content": {
+            "application/x-www-form-urlencoded": {
+                "schema": {
+                    "type": "object",
+                    "properties": {
+                        "code": {
+                            "type": "string",
+                            "description": "The authorization code provided by LINE Notify API.",
+                            "required": "true"
+                        },
+                        "state": {
+                            "type": "string",
+                            "description": "The state for preventing replay attack.",
+                            "required": "true"
                         }
                     }
                 }
             }
         }
+    },
+    "responses": {
+        "200": {
+            "description": "Success with access token being returned.",
+            "content": {
+                "text/plain": {}
+            }
+        },
+        "400": {
+            "description": "Not able to fetch access token from LINE notify.",
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/error"
+                    }
+                }
+            }
+        },
+        "401": {
+            "description": "No authorization code in request.",
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/error"
+                    }
+                }
+            }
+        },
+        "501": {
+            "description": "Server has not been properly configured.",
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/error"
+                    }
+                }
+            }
+        }
     }
-)
+})
 def authorize_callback_post() -> flask.Response:
     return authorize_callback()
